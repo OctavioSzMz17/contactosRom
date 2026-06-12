@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Contact extends Model
 {
@@ -27,5 +28,13 @@ class Contact extends Model
         return [
             'contrasena' => 'hashed',
         ];
+    }
+
+    /**
+     * Relación polimórfica: un Contact puede tener muchas imágenes.
+     */
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

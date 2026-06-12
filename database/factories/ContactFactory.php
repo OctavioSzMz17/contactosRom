@@ -25,7 +25,7 @@ class ContactFactory extends Factory
     {
         return [
             'nombre' => fake()->name(),
-            'numero' => fake()->phoneNumber(),
+            'numero' => '771' . fake()->numerify('#######'),
             'usuario' => fake()->unique()->userName(),
             'contrasena' => static::$password ??= Hash::make('password'),
             'correo' => fake()->unique()->safeEmail(),

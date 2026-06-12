@@ -16,15 +16,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-
+        // 20 usuarios, cada uno con número de teléfono iniciando con 771
         User::factory(20)->create();
 
         Contact::factory(10)->create();
+
+        // Seeder de imágenes polimórficas (debe ir DESPUÉS de users y contacts)
+        $this->call(ImageSeeder::class);
     }
 }
