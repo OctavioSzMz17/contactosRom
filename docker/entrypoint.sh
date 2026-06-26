@@ -6,6 +6,10 @@
 # =============================================================
 set -e
 
+echo "==> Linking public storage..."
+rm -rf /var/www/html/public/storage
+php /var/www/html/artisan storage:link
+
 echo "==> Fixing storage permissions..."
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
