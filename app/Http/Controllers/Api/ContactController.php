@@ -47,9 +47,9 @@ class ContactController extends Controller
                 'alpha_num',
                 'unique:contacts,usuario'
             ],
-            'contrasena' => 'required|string|min:6|max:100',
+            'contrasena' => 'nullable|string|min:6|max:100',
             'correo' => [
-                'required',
+                'nullable',
                 'email',
                 'max:100',
                 'unique:contacts,correo'
@@ -105,10 +105,10 @@ class ContactController extends Controller
                 'alpha_num',
                 'unique:contacts,usuario,' . $contact->id
             ],
-            'contrasena' => 'sometimes|required|string|min:6|max:100',
+            'contrasena' => 'sometimes|nullable|string|min:6|max:100',
             'correo' => [
                 'sometimes',
-                'required',
+                'nullable',
                 'email',
                 'max:100',
                 'unique:contacts,correo,' . $contact->id
