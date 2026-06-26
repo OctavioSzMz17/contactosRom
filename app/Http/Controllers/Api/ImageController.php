@@ -57,14 +57,12 @@ class ImageController extends Controller
     }
 
     /**
-     * Ver una imagen específica de un contacto.
+     * Ver una imagen específica.
      *
-     * GET /api/contacts/{contact}/images/{image}
+     * GET /api/images/{image}  (shallow)
      */
-    public function show(Contact $contact, Image $image)
+    public function show(Image $image)
     {
-        $this->authorizeImage($contact, $image);
-
         return response()->json([
             'success' => true,
             'data'    => new ImageResource($image),
@@ -72,17 +70,15 @@ class ImageController extends Controller
     }
 
     /**
-     * Actualizar una imagen de un contacto.
+     * Actualizar una imagen.
      * Reemplaza el archivo físico anterior si se envía uno nuevo.
      *
-     * PATCH /api/contacts/{contact}/images/{image}  (shallow)
+     * PATCH /api/images/{image}  (shallow)
      * Content-Type: multipart/form-data
      * Campos: imagen (file, opcional), alt (string, opcional)
      */
-    public function update(Request $request, Contact $contact, Image $image)
+    public function update(Request $request, Image $image)
     {
-        $this->authorizeImage($contact, $image);
-
         $validated = $request->validate([
             'imagen' => 'sometimes|image|mimes:jpeg,png,jpg,webp|max:5120',
             'alt'    => 'sometimes|nullable|string|max:150',
@@ -107,15 +103,13 @@ class ImageController extends Controller
     }
 
     /**
-     * Eliminar una imagen de un contacto.
+     * Eliminar una imagen.
      * También borra el archivo físico del storage.
      *
-     * DELETE /api/contacts/{contact}/images/{image}  (shallow)
+     * DELETE /api/images/{image}  (shallow)
      */
-    public function destroy(Contact $contact, Image $image)
+    public function destroy(Image $image)
     {
-        $this->authorizeImage($contact, $image);
-
         $this->deleteStorageFile($image->url);
         $image->delete();
 
@@ -123,20 +117,6 @@ class ImageController extends Controller
             'success' => true,
             'message' => 'Imagen eliminada exitosamente',
         ], 200);
-    }
-
-    /**
-     * Verifica que la imagen pertenece al contacto dado.
-     * Evita acceder a imágenes de otro contacto mediante la URL.
-     */
-    private function authorizeImage(Contact $contact, Image $image): void
-    {
-        if (
-            $image->imageable_type !== Contact::class ||
-            $image->imageable_id   !== $contact->id
-        ) {
-            abort(404, 'Imagen no encontrada para este contacto.');
-        }
     }
 
     /**
